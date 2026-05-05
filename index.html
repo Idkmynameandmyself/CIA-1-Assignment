@@ -1,100 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Naive Bayes Learning System</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naive Bayes Intelligence Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🧠 Naive Bayes Interactive Lab</h1>
-            <p>A Comprehensive Learning System for Engineering Students</p>
-        </header>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dataset" aria-label="Naive Bayes Studio home">
+        <span class="brand-mark">NB</span>
+        <span>
+          <strong>Bayes Studio</strong>
+          <small>ML learning console</small>
+        </span>
+      </a>
 
-        <!-- STEP 1: Dataset Input -->
-        <div class="card" id="step1">
-            <h2>1. Dataset Input Module</h2>
-            <div class="input-group">
-                <input type="file" id="csvFile" accept=".csv">
-                <button onclick="app.upload()">Load & Preview</button>
-            </div>
-            <div id="preview-area" class="preview-box">Upload a CSV to begin...</div>
-        </div>
+      <nav class="nav-stack" aria-label="Workflow navigation">
+        <button class="nav-btn active" data-target="dataset"><span>01</span>Dataset</button>
+        <button class="nav-btn" data-target="preprocess"><span>02</span>Preprocess</button>
+        <button class="nav-btn" data-target="eda"><span>03</span>Explore</button>
+        <button class="nav-btn" data-target="learn"><span>04</span>Learn</button>
+        <button class="nav-btn" data-target="train"><span>05</span>Train</button>
+        <button class="nav-btn" data-target="predict"><span>06</span>Predict</button>
+        <button class="nav-btn" data-target="evaluate"><span>07</span>Evaluate</button>
+      </nav>
 
-        <!-- STEP 2: Preprocessing -->
-        <div class="card hidden" id="step2">
-            <h2>2. Preprocessing Interface</h2>
-            <div class="edu-panel">
-                <strong>Why Preprocess?</strong> Missing values can bias a model. Scaling ensures no single feature dominates.
-            </div>
-            <div class="input-group">
-                <select id="prepOption">
-                    <option value="mean">Missing Value Handling (Mean Imputation)</option>
-                    <option value="scale">Feature Scaling (Standardization)</option>
-                    <option value="encode">Label Encoding</option>
-                </select>
-                <button onclick="app.preprocess()">Apply & Compare</button>
-            </div>
-            <div id="prep-output" class="comparison-grid"></div>
-        </div>
+      <div class="side-panel">
+        <small>Current stack</small>
+        <strong>Gaussian / Multinomial NB</strong>
+        <p>Client-side modelling with transparent calculations.</p>
+      </div>
+    </aside>
 
-        <!-- STEP 3: EDA -->
-        <div class="card hidden" id="step3">
-            <h2>3. Exploratory Data Analysis (EDA)</h2>
-            <div class="eda-grid">
-                <div class="chart-box"><h3>Class Distribution</h3><canvas id="classChart"></canvas></div>
-                <div class="chart-box"><h3>Feature Distribution</h3><canvas id="featureChart"></canvas></div>
-            </div>
-            <button onclick="app.getCorrelation()">Analyze Correlation</button>
-            <div id="corr-output" class="preview-box"></div>
+    <main class="main">
+      <header class="hero">
+        <div>
+          <p class="section-label">Interactive machine learning lab</p>
+          <h1>Train, inspect, and explain Naive Bayes like an enterprise AI console.</h1>
+          <p class="hero-copy">Upload a CSV or launch the Iris sample, clean the features, inspect distributions, train a classifier, and walk through every probability behind a prediction.</p>
+          <div class="hero-actions">
+            <button type="button" class="primary-action" id="heroSampleBtn">Load Iris Sample</button>
+            <a class="ghost-action" href="#train" id="viewPipelineBtn">View Pipeline</a>
+          </div>
         </div>
+        <div class="hero-card" aria-label="Model performance preview">
+          <div class="signal-row">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="metric-kicker">Readiness score</div>
+          <strong>96.8%</strong>
+          <p>Transparent model diagnostics, priors, likelihoods, and confusion matrix outputs in one workspace.</p>
+        </div>
+      </header>
 
-        <!-- STEP 4 & 5: Config & Training -->
-        <div class="card hidden" id="step4">
-            <h2>4 & 5. Training Configuration</h2>
-            <div class="config-grid">
-                <div class="item"><label>Split Ratio:</label><input type="number" id="split" value="0.2" step="0.1"></div>
-                <div class="item"><label>K-Fold CV:</label><input type="number" id="kfold" value="5"></div>
-                <div class="item"><label>Algorithm:</label>
-                    <select id="nbType">
-                        <option value="gaussian">Gaussian Naive Bayes</option>
-                        <option value="multinomial">Multinomial Naive Bayes</option>
-                    </select>
-                </div>
+      <section class="workspace">
+        <section id="dataset" class="page active">
+          <div class="page-heading">
+            <span>01</span>
+            <div>
+              <h2>Dataset Input Module</h2>
+              <p>Bring in measurements, detect the target column, and preview records before modelling.</p>
             </div>
-            <button onclick="app.train()" class="primary-btn">Execute Training Pipeline</button>
-        </div>
+          </div>
 
-        <!-- STEP 6: Visualization -->
-        <div class="card hidden" id="step5">
-            <h2>6. Model Training & Visualization</h2>
-            <div id="params-output" class="preview-box"></div>
-        </div>
-
-        <!-- STEP 7: Prediction -->
-        <div class="card hidden" id="step6">
-            <h2>7. Prediction & Inference</h2>
-            <div class="edu-panel">
-                <strong>The Formula:</strong> P(Class|Features) ∝ Prior × Likelihood
+          <div class="panel split-panel">
+            <div>
+              <h3>Source</h3>
+              <p class="muted">Use the curated Iris sample for a quick demo, or upload your own CSV with the class label in the final column.</p>
             </div>
-            <div class="input-group">
-                <input type="text" id="predictInput" placeholder="Enter values (e.g. 5.1, 3.5, 1.4, 0.2)">
-                <button onclick="app.predict()">Compute Prediction</button>
+            <div class="control-row">
+              <button id="loadSampleBtn" type="button">Use Iris Sample</button>
+              <label class="file-picker">
+                <input id="csvInput" type="file" accept=".csv" />
+                <span>Upload CSV</span>
+              </label>
             </div>
-            <div id="predict-output" class="preview-box"></div>
-        </div>
+          </div>
 
-        <!-- STEP 8: Evaluation -->
-        <div class="card hidden" id="step7">
-            <h2>8. Evaluation Metrics</h2>
-            <div id="metrics-output" class="metrics-grid"></div>
-            <h3>Confusion Matrix</h3>
-            <div id="cm-output" class="preview-box"></div>
-        </div>
-    </div>
-    <script src="js/app.js"></script>
+          <div class="upload-status" id="uploadStatus" aria-live="polite">
+            <div class="upload-status__top">
+              <span id="uploadStatusText">Waiting for a dataset</span>
+              <strong id="uploadPercent">0%</strong>
+            </div>
+            <div class="upload-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="uploadProgress"></span>
+            </div>
+          </div>
+
+          <div id="datasetInfo" class="panel stat-panel hidden"></div>
+          <div class="table-wrap"><table id="previewTable"></table></div>
+        </section>
+
+        <section id="preprocess" class="page">
+          <div class="page-heading">
+            <span>02</span>
+            <div>
+              <h2>Preprocessing Interface</h2>
+              <p>Choose the class label and impute missing numeric feature values before training.</p>
+            </div>
+          </div>
+
+          <div class="panel form-grid">
+            <label>Target column
+              <select id="targetSelect"></select>
+            </label>
+            <label>Missing value strategy
+              <select id="missingSelect">
+                <option value="mean">Fill numeric missing values with mean</option>
+                <option value="median">Fill numeric missing values with median</option>
+              </select>
+            </label>
+            <button id="preprocessBtn" type="button">Apply Preprocessing</button>
+          </div>
+          <div id="preprocessOutput" class="panel hidden"></div>
+        </section>
+
+        <section id="eda" class="page">
+          <div class="page-heading">
+            <span>03</span>
+            <div>
+              <h2>Exploratory Data Analysis</h2>
+              <p>Review class balance and numeric feature statistics before selecting a model.</p>
+            </div>
+          </div>
+          <div id="edaOutput" class="eda-grid"></div>
+        </section>
+
+        <section id="learn" class="page">
+          <div class="page-heading">
+            <span>04</span>
+            <div>
+              <h2>Naive Bayes Learning Module</h2>
+              <p>See the exact probability idea used to choose the most likely class.</p>
+            </div>
+          </div>
+          <div class="panel theory-panel">
+            <h3>Main Idea</h3>
+            <p>Naive Bayes predicts the class with the highest posterior probability.</p>
+            <div class="formula">Posterior = Prior x Likelihood</div>
+            <p>For Gaussian Naive Bayes, every numeric feature is treated as a class-specific bell curve.</p>
+            <div class="formula">P(x | class) = 1 / sqrt(2*pi*sigma^2) x e<sup>-(x-mu)^2/(2*sigma^2)</sup></div>
+          </div>
+          <div id="learnOutput" class="panel hidden"></div>
+        </section>
+
+        <section id="train" class="page">
+          <div class="page-heading">
+            <span>05</span>
+            <div>
+              <h2>Training Configuration</h2>
+              <p>Calculate priors and likelihood parameters from the cleaned dataset.</p>
+            </div>
+          </div>
+          <div class="panel form-grid">
+            <label>Model type
+              <select id="modelTypeSelect">
+                <option value="gaussian">Gaussian Naive Bayes - numeric measurements</option>
+                <option value="multinomial">Multinomial Naive Bayes - count/frequency data</option>
+              </select>
+            </label>
+            <label>K-fold value
+              <input id="kFoldInput" type="number" min="2" max="10" value="5" />
+            </label>
+            <label>Train split: <span id="splitText">80%</span>
+              <input id="splitSlider" type="range" min="50" max="90" value="80" step="5" />
+            </label>
+            <button id="trainBtn" type="button">Train Model</button>
+          </div>
+          <div id="trainOutput" class="panel hidden"></div>
+        </section>
+
+        <section id="predict" class="page">
+          <div class="page-heading">
+            <span>06</span>
+            <div>
+              <h2>Prediction & Inference</h2>
+              <p>Enter feature values and inspect the winning class score with step-by-step calculations.</p>
+            </div>
+          </div>
+          <div id="predictionForm" class="panel"></div>
+          <div id="predictionOutput" class="panel hidden"></div>
+        </section>
+
+        <section id="evaluate" class="page">
+          <div class="page-heading">
+            <span>07</span>
+            <div>
+              <h2>Evaluation Metrics</h2>
+              <p>Review test accuracy, per-class scores, confusion matrix, and cross-validation setting.</p>
+            </div>
+          </div>
+          <div id="evaluationOutput" class="panel empty-state">Train a model to generate evaluation results.</div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
